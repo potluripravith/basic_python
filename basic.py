@@ -23,3 +23,85 @@ def calculate_area(length, width):
 
 print(calculate_area(5, 4)) 
 
+### Python Fundamentals 
+
+
+try:
+    result = 10/0
+except ZeroDivisionError:
+    print("cannot")
+finally:
+    print("cleanup complete")
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
