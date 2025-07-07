@@ -85,3 +85,52 @@ class OrderProcessor:
 ### Dependency chain trap 
 #### when i split the code in srp for responsibilities but a hidden dependencies between components this may create coupled system 
 ## so we create Constructor  so that we can given mock files or something to it or we will create ABC class
+
+
+##2) Open /Closed Principl(OCP)
+## if want add new feature by writting new code but not changing the existing code that already works
+
+### inheritance - Based OCP:
+
+from abc import ABC , abstractmethod
+
+class Report(ABC):
+    @abstractmethod
+    def generate(self) :
+        pass
+class PDFReport(Report) :
+    def generate(self):
+        return "PDF content"
+class HTMLReport(Report) :
+    def generate(self):
+        return "html report content"
+
+## so now we need add csv report we directly create class of csv and reurn 
+
+class CSVReport(Report):
+    def generate(self):
+        return "csv"
+    
+
+# BAD: Premature abstraction
+class AbstractReport(ABC):
+    @abstractmethod
+    def generate_pdf(self):
+        pass
+    
+    @abstractmethod
+    def generate_html(self): 
+        pass# Violates ISP and OCP
+
+# GOOD: Abstract only what varies
+class ReportGenerator(ABC):
+    @abstractmethod
+    def generate(self):
+        pass
+
+class PDFGenerator(ReportGenerator):
+    pass
+
+## here instead of commit as pdf create general generate
+
+
