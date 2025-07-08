@@ -134,3 +134,5 @@ class PDFGenerator(ReportGenerator):
 ## here instead of commit as pdf create general generate
 
 
+### Liskov Substitution Principle (LSP) :
+###A subclass should be substitutable for its superclass without breaking the application.
