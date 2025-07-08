@@ -47,7 +47,142 @@ bird.fly()
 
 ###Time 12:00 PM--------
 #### TIme 1:00 PM
-####Interface segregation Principle
+###Interface segregation Principle
+#### Clients should not be forced to depend on interfaces they don't use 
+from abc import ABC, abstractmethod
+class MultiFunctionPrinter(ABC):
+    @abstractmethod
+    def print(self, document): 
+        pass
+    
+    @abstractmethod
+    def scan(self):
+        pass 
+    
+    @abstractmethod
+    def fax(self, document): 
+        pass
 
+class BasicPrinter(MultiFunctionPrinter):
+    def print(self, document):
+        print(f"Printing: {document}")
+    
+    def scan(self):
+        raise NotImplementedError("Scan not supported!")  # Forced to implement
+    
+    def fax(self, document):
+        raise NotImplementedError("Fax not supported!")  # Forced to implement
+#instead of force to apply 
+from typing import Protocol
+class Printer(Protocol):
+    def print(self, document: str) -> None: 
+        pass
 
+class Scanner(Protocol):
+    def scan(self) -> str:
+        pass
+
+class Fax(Protocol):
+    def fax(self, document: str) -> None: 
+        pass
+
+class BasicPrinter(Printer):
+    def print(self, document: str) -> None:
+        print(f"Printing: {document}")
+
+class MultiFunctionDevice(Printer, Scanner, Fax):
+    def print(self, document: str) -> None: 
+        pass
+    def scan(self) -> str:
+        pass
+    def fax(self, document: str) -> None: 
+        pass
+
+class DocumentProcessor:
+    def __init__(self, printer: Printer):  # Depends ONLY on Printer
+        self.printer = printer
+    
+    def process_report(self):
+        self.printer.print("Annual Report")
         
+        
+        
+#another example
+##Payment system 
+
+class paymentProcessor(ABC):
+    @abstractmethod
+    def process_credit(self, amount):
+        pass
+    @abstractmethod
+    def process_paypal(self, amount):
+        pass
+    @abstractmethod
+    def process_crpto(self, amount):
+        pass
+class paypalgateway(paymentProcessor):
+    def process_credit(self, amount):
+        raise NotImplementedError # not supported
+# instead we can do this 
+class CreditCardProcessor(Protocol):
+    def process_credit_card(self, amount): 
+        pass
+
+class PayPalProcessor(Protocol):
+    def process_paypal(self, amount): 
+        pass
+
+class CryptoProcessor(Protocol):
+    def process_crypto(self, amount):
+        pass
+
+class PayPalGateway(PayPalProcessor):
+    def process_paypal(self, amount):
+        pass# Only implement needed method
+
+
+
+### Dependency Inversion Principle 
+
+### high level modules should not depend on low level modules .both should depend on abstractions
+
+### abstractions should not depend on details .details depend on abstractions
+
+##low level moodule 
+class MySQLDatabase :
+    def save(self, order_data:dict)-> None :
+        print("saving to mysql")
+        
+#high level module
+class OrderProcessor:
+    def __init__(self):
+        # Direct dependency on concrete implementation
+        self.db = MySQLDatabase()
+        
+    def process_order(self, order: dict) -> None:
+        # Core business logic
+        if order["amount"] > 1000:
+            order["discount"] = 0.1
+        
+        # Direct call to low-level implementation
+        self.db.save(order) 
+        
+## here it is directly call low level module so we can create abstraction or protcol so that it will depend on them
+class Order(Protocol):
+    def save (self, order_data:dict)->None:
+        pass
+class OrderProcessor:
+    def __init__(self, repository: Order):
+        # Direct dependency on concrete implementation
+        self.repository = repository
+        
+    def process_order(self, order:dict ) -> None:
+        # Core business logic
+        if order["amount"] > 1000:
+            order["discount"] = 0.1
+        
+        # Direct call to low-level implementation
+        self.repository.save(order)
+class MySQLDatabase :
+    def save(self, order_data:dict)-> None :
+        print(f"saving to mysql:{order_data}")
