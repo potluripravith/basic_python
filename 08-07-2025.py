@@ -186,3 +186,190 @@ class OrderProcessor:
 class MySQLDatabase :
     def save(self, order_data:dict)-> None :
         print(f"saving to mysql:{order_data}")
+
+
+#### 9:00 pm
+
+###oops
+
+###classes and objects one is the blue print and another one is instances
+
+class DynamicClass:
+    def save(self):
+        print("save money")
+obj = DynamicClass()
+obj.save()
+
+##Class vs Instance Variable
+
+class Counter:
+    count = 0
+    def __init__(self):
+        self.id = id(self)
+        
+c1 = Counter()
+c2 = Counter()
+Counter.count += 1
+print(c1.count,c2.count)
+
+## so class variable is shared along all the objects where as instance is may different from different objects and if we change class varaible it will change for all
+#### Inheritance enables code to have hierarchical relationships between classes .
+
+class Animal:
+    def __init__(self,name):
+        self.name = name
+        
+    def speak(self):
+        raise NotImplementedError("subclass must implement this method")
+    
+    
+class Dog(Animal):
+    def speak(self):
+        return "Bow"
+    
+class Cat(Animal):
+    def speak(self):
+        return "Meow"
+    
+animals = {Dog("Buddy"),Cat("sass")}
+
+for animal in animals:
+    print(f"{animal.name}: {animal.speak()}")
+### and we can use super() for parent Access
+### MRO Method Resolution Order
+class A:
+    def method(self):
+        print("A.method")
+
+class B(A):
+    def method(self):
+        print("B.method")
+        super().method()
+
+class C(A):
+    def method(self):
+        print("C.method")
+        super().method()
+
+class D(B, C):
+    def method(self):
+        print("D.method")
+        super().method()
+        
+d = D()
+d.method()
+### A superclass and b and c are subclasses of A and B and C are super classes of D 
+
+## so first in prints D and then B is the first super class of D so it goes to B print B and and then c and then it will print a 
+###Encapsulation Protects object integrity by controlling access to internal state 
+
+class Bank:
+    def __init__(self, balance, code):
+        self._balance = balance # Protected
+        self.__code = code ### Private
+        
+    def balance(self):
+        return self._balance
+    
+### so we protected if we want our subclasses to use but private cannot used by subclasses
+
+###Polymorphism allows objects of different types to treated as objects of a common supertype.
+
+### Duck typing :
+
+class PdfExporter:
+    def export(self, data):
+        return f"PDF :{data}"
+class CsvExporter:
+    def export(self, data):
+        return f"CSV:{data}"
+def export_report(exporter, report_data):
+    """Works with any object having an export() method"""
+    return exporter.export(report_data)
+
+pdf = PdfExporter()
+csv = CsvExporter()
+
+
+print(export_report(pdf, ["Sales", 1000]))  # PDF: ['Sales', 1000]
+print(export_report(csv, ["Sales", 1000]))  # CSV: Sales,1000
+
+
+### Operator Overloading
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, other):
+        """Polymorphic addition operator"""
+        return Vector(self.x + other.x, self.y + other.y)
+    
+    def __mul__(self, scalar):
+        """Polymorphic multiplication"""
+        return Vector(self.x * scalar, self.y * scalar)
+    
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
+# Usage
+v1 = Vector(2, 3)
+v2 = Vector(1, 1)
+print(v1 + v2)  
+print(v1 * 3)   
+
+### Abstract Base Classes (ABCs) define interfaces that enforce method implementation .they create formal contracts for polymorphism and inheritance.
+
+
+from abc import ABC, abstractmethod
+
+class PaymentProcessor(ABC):
+    @abstractmethod
+    def process_payment(self, amount):
+        pass  # No implementation here
+
+# Subclass must implement the abstract method
+class CreditCardProcessor(PaymentProcessor):
+    def process_payment(self, amount):
+        print(f"Processing credit card payment of {amount}")
+
+class UPIProcessor(PaymentProcessor):
+    def process_payment(self, amount):
+        print(f"Processing UPI payment of {amount}")
+# Valid
+credit = CreditCardProcessor()
+credit.process_payment(1000)
+
+upi = UPIProcessor()
+upi.process_payment(500)
+
+# Invalid: Can't instantiate abstract class
+# invalid = PaymentProcessor() 
+### @property access methofs like attributes 
+class Circle:
+    def __init__(self, radius):
+        self._radius = radius  # protected
+
+    @property
+    def radius(self):
+        return self._radius  # getter
+
+    @radius.setter
+    def radius(self, value):
+        if value <= 0:
+            raise ValueError("Radius must be positive")
+        self._radius = value
+
+    @property
+    def area(self):
+        return 3.1416 * self._radius ** 2  # read-only
+c = Circle(5)
+print(c.radius)    
+print(c.area)        
+
+c.radius = 10       
+print(c.area)        
+
+# c.radius = -5      
+
+
