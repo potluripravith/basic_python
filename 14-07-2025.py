@@ -129,5 +129,93 @@ asyncio.run(main())
 
 
 
+#### Meta classes in python we can get true overlaoding 
+#### every object in as type 
+class MyClass :
+    pass
 
+print(type(MyClass))
+
+class MyMeta(type):
+    def __new__(cls,name,bases ,dct):
+        print(f"Creating class {name}")
+        return super().__new__(cls,name,bases,dct)
+    
+class Myclass(metaclass = MyMeta):
+    pass
+
+### function overloading using metaclasses 
+def overload(f):
+    f.__overload__ = True
+    return f
+class overloadList(dict):
+    pass
+class OverloadDict(dict):
+    assert isinstance(key,str),'Ket must be str'
+    
+    prior_val = self.get(key,_MISSING)
+    overloaded = getattr(value,'__overload__',False)
+    
+    if prior_val is _MISSING:
+        insert_val = overloadList([value]) if overloaded else ValueError
+        super().__setitem__(key,insert_val)
+    elif isinstance(prior_val,overloadList):
+        if not overloaded:
+            raise ValueError(self._errmsg(key))
+        prior_val.append(value)
+    else:
+        if overloaded:
+            raise ValueError(self.errmsg(key))
+        super().__setitem__
+        
+        
+#### Decorators & Closures
+def make_adder(x):
+    def adder(y):
+        return x+y
+    return adder
+
+add7 = make_adder(7)
+print(add7(10))
+
+
+def add(x,y):
+    return x+y
+
+def logger_add(x,y):
+    print("calling add")
+    return add(x,y)
+
+logger_add(3,4)
+
+def make_logged(func):
+    def inner(*args,**kargs):
+        print(f'calling {func.__name__}')
+        return func(*args,**kargs)
+    return inner
+
+logger_add = make_logged(add)
+logger_add(5,6)
+
+
+def require_role(role_required):
+    def decorator(func):
+        def wrapper(user, *args, **kwargs):
+            if user.get("role") != role_required:
+                return f"Access denied for user '{user.get('name')}'"
+            return func(user, *args, **kwargs)
+        return wrapper
+    return decorator
+
+@require_role("admin")
+def delete_user(user, target_user):
+    return f"{user.get('name')} deleted {target_user}"
+
+# Test users
+admin_user = {"name": "Pravith", "role": "admin"}
+regular_user = {"name": "John", "role": "user"}
+
+# Calls
+print(delete_user(admin_user, "Bob"))   
+print(delete_user(regular_user, "Bob"))  
 
