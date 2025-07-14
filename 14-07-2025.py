@@ -75,8 +75,59 @@ with file_manager('example.txt','r')as f:
 ## even exception is rasied code still close the file 
     
     
-    
+####Asyncio is concurrent programming module in python for asynchronous I/O it used for doing tasks that wait so app can do other things while waiting 
+import asyncio
+import time
 
+async def fetch_data(delay):
+    print("fetching the data..")
+    await asyncio.sleep(delay)
+    print("data fetched")
+    return {"data": "Some data"}
+
+async def main():
+    print("start of main coroutine")
+    task = fetch_data(2)
+    print("End of the main coroutine")
+    ####  coroutine is not do untill it is awaited
+    result = await task
+    print(f'Recevied results: {result}')
+    print("End of the main coroutine")
     
+asyncio.run(main())
+
+
+
+import asyncio
+import time
+
+async def fetch_data(id,delay):
+    print(f"fetching the data id :{id}")
+    await asyncio.sleep(delay)
+    print(f"data fetched id :{id}")
+    return {"data": "Some data" ,"id" : id}
+
+async def main():
+    task1 = asyncio.create_task(fetch_data(1,1))
+    task2 = asyncio.create_task(fetch_data(2,2))
+    task3 = asyncio.create_task(fetch_data(3,3))
+    
+    ### gather funtion result = await asyncio.gather(fetch_data(1,1))  it is sometimes bad because if there is error in the one of the task it will not cancel other task 
+    ### so for the error handling taskGroup 
+    #### ASYNCO with asyncio.TaskGroup as tg
+    #### it will lock untill all task completed 
+    
+  
+    result1 = await task1
+   
+    result2 = await task2
+    result3 = await task3
+    print(f'Recevied results: {result2},{result1},{result3}')
+    
+    
+asyncio.run(main())    
+
+
+
 
 
