@@ -23,3 +23,33 @@ print(doubled_numbers)
 
 ## when there is complex implemnentation is requires then dont use or if it infinte then generators are useful dont use list comprehensions
 
+####Lambda Funtions for one time use the take any number of aru=guments helps namespace clean and is useful the higher order functions
+
+double = lambda x: x * 2 
+add = lambda x,y : x+y
+print(double([2,3]))
+print(add(2,3))
+max_value = lambda x,y : x if x > y else y 
+print(max_value(6,5))
+
+
+
+### list comprehensions create lists transformed colllections
+### lambdas create fucntions 
+students = [{"name": "Alice", "grade": 89}, {"name": "Bob", "grade": 72}]
+def grade_filter(min_grade):
+    return lambda student : student["grade"] > min_grade
+
+filter_A = grade_filter(85)
+filter_students = list(filter(filter_A,students))
+print(filter_students)
+
+numbers = [1,2,3,4]
+doubled = map(lambda x: x*2,numbers)
+print(list(doubled))
+
+#### Context mangers
+
+gfh
+
+
