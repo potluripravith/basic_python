@@ -47,9 +47,36 @@ print(filter_students)
 numbers = [1,2,3,4]
 doubled = map(lambda x: x*2,numbers)
 print(list(doubled))
+ 
+#### Context mangers is a construct that manages resources 
+## most commonly used with open("file.txt") as f:
+#data = read()
+from contextlib import contextmanager
+from typing import Any, Generator,IO
 
-#### Context mangers
+@contextmanager
+def file_manager(path:str,mode:str)-> Generator[IO,Any,None]:
+    file:IO =open(path,mode)
+    print('Opening file ..')
+    try:
+        yield file
+    except Exception as e:
+        print(e)
 
-gfh
+    finally:
+        print('Closing file')
+        if file:
+            file.close()
+
+with file_manager('example.txt','r')as f:
+    raise Exception('sunny did wrong')
+   
+    print(f.read())
+## even exception is rasied code still close the file 
+    
+    
+    
+
+    
 
 
