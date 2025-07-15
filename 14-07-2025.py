@@ -129,46 +129,7 @@ asyncio.run(main())
 
 
 
-#### Meta classes in python we can get true overlaoding 
-#### every object in as type 
-class MyClass :
-    pass
 
-print(type(MyClass))
-
-class MyMeta(type):
-    def __new__(cls,name,bases ,dct):
-        print(f"Creating class {name}")
-        return super().__new__(cls,name,bases,dct)
-    
-class Myclass(metaclass = MyMeta):
-    pass
-
-### function overloading using metaclasses 
-def overload(f):
-    f.__overload__ = True
-    return f
-class overloadList(dict):
-    pass
-class OverloadDict(dict):
-    assert isinstance(key,str),'Ket must be str'
-    
-    prior_val = self.get(key,_MISSING)
-    overloaded = getattr(value,'__overload__',False)
-    
-    if prior_val is _MISSING:
-        insert_val = overloadList([value]) if overloaded else ValueError
-        super().__setitem__(key,insert_val)
-    elif isinstance(prior_val,overloadList):
-        if not overloaded:
-            raise ValueError(self._errmsg(key))
-        prior_val.append(value)
-    else:
-        if overloaded:
-            raise ValueError(self.errmsg(key))
-        super().__setitem__
-        
-        
 #### Decorators & Closures
 def make_adder(x):
     def adder(y):
@@ -218,4 +179,65 @@ regular_user = {"name": "John", "role": "user"}
 # Calls
 print(delete_user(admin_user, "Bob"))   
 print(delete_user(regular_user, "Bob"))  
+
+#### Protocols
+
+from typing import Protocol
+class Greetable(Protocol):
+    def greet(self)->str:
+        ...
+class Person:
+    def greet(self) ->str:
+        return "Hello"
+    
+def say_Hello(entity:Greetable):
+    print(entity.greet())
+    
+p = Person()
+say_Hello(p)    
+
+
+##Protocols in python is way of defining structural subtyping similar to duck typing Think of protocol as an interface you must have this behavior , not you must inherit from me
+from typing import Protocol 
+
+class Flyer(Protocol):
+    def fly(self):
+        ...
+class Bird():
+    def fly(self):
+        return "I am flying!"
+    
+def let_it_fly(thing: Flyer):
+    print(thing.fly())
+    
+bird = Bird()
+let_it_fly(bird)
+    
+from typing import Protocol
+class Named(Protocol):
+    name:str
+    
+class Person:
+    def __init__(self,name):
+        self.name = name
+        
+def greet(entity:Named):
+    print(f"Hello {entity.name}")
+    
+greet(Person("Alice"))
+
+###
+from typing import runtime_checkable, Protocol
+
+@runtime_checkable
+class Closer(Protocol):
+    def close(self) -> None:
+        ...
+
+class File:
+    def close(self):
+        print("Closed")
+
+f = File()
+print(isinstance(f, Closer))  
 
