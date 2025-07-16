@@ -241,3 +241,11 @@ class File:
 f = File()
 print(isinstance(f, Closer))  
 
+### Meta Classses 
+## we class where we can create objects it is blurprint and we attributes 
+##every thing python is a object so we can know that there is another class which we make any other class
+## ther is a metaclass which tell behaviour of+ the classes 
+class sunny:
+    pass
+a = sunny()
+type(a)
