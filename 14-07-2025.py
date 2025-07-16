@@ -72,7 +72,7 @@ with file_manager('example.txt','r')as f:
     raise Exception('sunny did wrong')
    
     print(f.read())
-## even exception is rasied code still close the file 
+## even exception ims rasied code still close the file 
     
     
 ####Asyncio is concurrent programming module in python for asynchronous I/O it used for doing tasks that wait so app can do other things while waiting 
